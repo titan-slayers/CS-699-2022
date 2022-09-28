@@ -1,12 +1,14 @@
 from dis import dis
 import requests
 from bs4 import BeautifulSoup
-import re
+import re,time
 
 def getData(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.104 Safari/537.36'}
     req = requests.get(url, headers=headers)
+    time.sleep(2)
     soup = BeautifulSoup(req.content,"lxml")
+
     price = soup.find("span", attrs={"class":"a-price a-text-price a-size-medium apexPriceToPay"})
     price = price.find("span",attrs={"class":"a-offscreen"})
     price = price.string.strip()[1:]

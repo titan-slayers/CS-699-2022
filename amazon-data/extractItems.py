@@ -7,7 +7,7 @@ from datetime import date
 driver = webdriver.Chrome()
 driver.get('https://www.amazon.in/')
 
-fields = ['date','set','item-name', 'category', 'amazon-link', 'amazon-price', 'amazon-discounted-price' ,'amazon-discount-percent', 'amazon-rating', 'amazon-total-ratings']
+fields = ['item-name', 'category', 'item-code']
 
 menu = driver.find_element(By.ID, 'nav-hamburger-menu')
 menu.click()
@@ -45,29 +45,13 @@ for obj in listHmenu:
 
     for item in items:
         if(item):
-            print(item.get_attribute('href'))
             i1 = []
-            today = date.today()
-            day = today.strftime("%d/%m/%Y")
-            i1.append(day)
-            i1.append('2')
             i1.append(item.text)
             i1.append(category)
-
-            url = item.get_attribute('href')
-            i1.append(url)
-
-            i2 = getData(url)
-            time.sleep(2)
-
-            for x in i2:
-                i1.append(x)
-            print('this is...',i1)
+            i1.append('')
             rows.append(i1)
-    print('done \n\n\n\n')
 
-
-with open('data.csv', 'w') as csvfile: 
+with open('itemlist.csv', 'w') as csvfile: 
     csvwriter = csv.writer(csvfile)    
     csvwriter.writerow(fields)  
     csvwriter.writerows(rows)
