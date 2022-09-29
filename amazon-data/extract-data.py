@@ -11,7 +11,7 @@ size = 0
 with open('data.csv', 'r') as csvfile: 
     csvData = csv.reader(csvfile)
     c = 0
-    for c in csvData:
+    for o in csvData:
         c+=1
         if(c==2):
             size = 1
