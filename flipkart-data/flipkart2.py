@@ -100,6 +100,5 @@ with open('data1.csv', 'a') as csvfile:
 
 
 
-print(faulty)                    
 driver.close()  
 
