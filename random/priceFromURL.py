@@ -1,4 +1,3 @@
-from dis import dis
 import requests
 from bs4 import BeautifulSoup
 import re,time

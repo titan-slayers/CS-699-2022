@@ -1,20 +1,20 @@
+from xxlimited import new
 from selenium import webdriver 
 from selenium.webdriver.common.by import By
 import time,csv
-from priceFromURL import getData
 from datetime import date
 
 driver = webdriver.Chrome()
 driver.get('https://www.amazon.in/')
 
-fields = ['item-name', 'category', 'item-code']
+fields = ['item-name', 'category', 'item-amazon-code','item-flipkart-code']
 
 menu = driver.find_element(By.ID, 'nav-hamburger-menu')
 menu.click()
 
 time.sleep(2)
 
-electronics = driver.find_element(By.LINK_TEXT,'TV, Appliances, Electronics')
+electronics = driver.find_element(By.LINK_TEXT,'Mobiles, Computers')
 electronics.click()
 
 time.sleep(2)
@@ -26,7 +26,9 @@ for x in listHmenu:
     if(x.text):
         newList.append(x)
 
-ind = [1,3,4,6,7,11,13,14,15,16]
+
+
+ind = [1,7,12,13]
 listHmenu = []
 for i in ind:
     listHmenu.append([newList[i].text,newList[i].get_attribute('href')])
@@ -35,9 +37,7 @@ rows = []
 
 for obj in listHmenu:
     category = obj[0]
-    print(category)
 
-    print(obj[1])
     driver.get(obj[1])
     time.sleep(2)
     
@@ -51,9 +51,9 @@ for obj in listHmenu:
             i1.append('')
             rows.append(i1)
 
-with open('itemlist.csv', 'w') as csvfile: 
+with open('itemlist.csv', 'a') as csvfile: 
     csvwriter = csv.writer(csvfile)    
-    csvwriter.writerow(fields)  
+    #csvwriter.writerow(fields)  
     csvwriter.writerows(rows)
 
 time.sleep(5)
