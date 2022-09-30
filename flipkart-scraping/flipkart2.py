@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 import time
 import csv
 from datetime import date
+from pathlib import Path
+
 
 
 file=open('itemlist.csv')
@@ -13,22 +15,20 @@ driver = webdriver.Chrome()
 driver.get("https://www.flipkart.com")
 cell=[]
 driver.find_element(By.XPATH,"/html/body/div[2]/div/div/button").click()
+
 faulty=[]
-size = 0
-with open('data1.csv', 'r') as csvfile: 
-    csvData = csv.reader(csvfile)
-    c = 0
-    for row in csvData:
-        c+=1
-        if(c==2):
-            size = 1
-            break
+today = date.today()
+day = today.strftime("%d_%m_%Y")
+set = today.strftime("%p")       
 
+fname = 'data/data_' + str(day) + '_' + str(set) +'.csv'
 
-with open('data1.csv', 'a') as csvfile: 
+filename = Path(fname)
+filename.touch(exist_ok=True)
+
+with open(filename, 'w+') as csvfile: 
         csvwriter = csv.writer(csvfile)    
-        if size == 0:
-            csvwriter.writerow(fields)  
+        csvwriter.writerow(fields)  
         for row in csvreader:
           item_name=row[0]
           category=row[1]
@@ -80,9 +80,6 @@ with open('data1.csv', 'a') as csvfile:
                     except:
                        flipkart_link="none"
                 
-          today = date.today()
-          day = today.strftime("%d/%m/%Y")
-          set = today.strftime("%p")       
           lis.append(day)
           lis.append(set)
           lis.append(index)
