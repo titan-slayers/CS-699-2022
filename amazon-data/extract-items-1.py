@@ -6,7 +6,7 @@ from datetime import date
 driver = webdriver.Chrome()
 driver.get('https://www.amazon.in/')
 
-fields = ['item-name', 'category', 'item-amazon-code','item-flipkart-code']
+fields = ['item-name', 'category']
 
 menu = driver.find_element(By.ID, 'nav-hamburger-menu')
 menu.click()

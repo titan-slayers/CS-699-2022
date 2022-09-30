@@ -4,7 +4,7 @@ import csv
 from datetime import date
 import time
 
-fields = ['date','set','item-name', 'category', 'amazon-link', 'amazon-price', 'amazon-discounted-price' , 'amazon-rating', 'amazon-total-ratings']
+fields = ['date','set','index','item-name', 'category', 'amazon-link', 'amazon-price', 'amazon-discounted-price' , 'amazon-rating', 'amazon-total-ratings']
 
 
 size = 0
@@ -33,13 +33,14 @@ with open('itemlist.csv', 'r') as csvfile:
             set = today.strftime("%p")
             val.append(day)
             val.append(set)
+            val.append(row[2])
             val.append(row[0])
             val.append(row[1])
 
             try:
                 data = getAmazonData(query)
-            except:
-                print(row[0])
+            except Exception as e:
+                print(row[0],'\n',e,'\n\n\n')
                 continue
 
             for d in data:
