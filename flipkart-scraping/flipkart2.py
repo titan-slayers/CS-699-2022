@@ -19,7 +19,8 @@ driver.find_element(By.XPATH,"/html/body/div[2]/div/div/button").click()
 faulty=[]
 today = date.today()
 day = today.strftime("%d_%m_%Y")
-set = today.strftime("%p")       
+set = today.strftime("%p")  
+    
 
 fname = 'data/data_' + str(day) + '_' + str(set) +'.csv'
 
