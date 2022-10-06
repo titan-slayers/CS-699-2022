@@ -87,9 +87,9 @@ with open(filename, 'w+') as csvfile:
           lis.append(item_name)
           lis.append(category)
           lis.append(flipkart_link)
-          lis.append(flipkart_price)
-          lis.append(flipkart_discounted_price)
           lis.append(flipkart_rating)
+          lis.append(flipkart_discounted_price)
+          lis.append(flipkart_price)
           lis.append(flipkart_total_rating)
           search.clear()
                     
