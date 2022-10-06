@@ -9,15 +9,19 @@ from .userAmazon.userSearcher import getUserDataAmazon
 
 
 @login_required
-def index(request):
+def search(request):
     if request.method == 'POST':
         query = request.POST.get("query")
         result = getUserDataAmazon(query)
-        #print(result)
+        print(result)
         context = {
         'result':result}
-        return render(request,'user/index.html',context)
+        return render(request,'user/search.html',context)
 
+    return render(request,'user/search.html')
+
+@login_required
+def index(request):
     return render(request,'user/index.html')
 
 def signup(request):

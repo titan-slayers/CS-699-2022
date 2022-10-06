@@ -1,0 +1,35 @@
+{% extends 'user/header.html' %}
+{% block body %}
+
+
+    <div class="card container">
+
+    <h5 class="card-header">Dynamo</h5>
+
+
+    <div class="card-body">
+
+        <form method="POST">{% csrf_token %}
+            <div class="form-group">
+                <label for="query">Enter product to search for</label>
+                <input type="text" class="form-control"  name="query" placeholder="search...">
+              </div>
+              <button type="submit" class="btn btn-primary">Search</button>
+                
+            </form>
+
+            {% if result %}
+                {{ result }}
+            {% endif %}
+   
+          <div class="border-top pt-3">
+              <small class="text-muted">
+                  tips..
+              </small>
+          </div>
+
+        </div>
+
+</div>
+
+{% endblock %}
