@@ -20,6 +20,7 @@ faulty=[]
 today = date.today()
 day = today.strftime("%d_%m_%Y")
 set = today.strftime("%p")  
+
     
 
 fname = 'data/data_' + str(day) + '_' + str(set) +'.csv'
