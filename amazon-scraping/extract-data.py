@@ -16,7 +16,7 @@ with open('itemlist.csv', 'r') as csvfile:
     today = date.today()
     day = today.strftime("%d_%m_%Y")
     set = today.strftime("%p")
-    set="PM"
+   
    
 
     
