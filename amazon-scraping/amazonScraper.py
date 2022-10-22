@@ -41,4 +41,5 @@ def getAmazonData(query,driver):
     link = 'https://www.amazon.in'+str(link['href'])
     return [link,price,dprice.text,rating,totalRatings.text]
 
-#print(getAmazonData('Redmi A1 (Black, 2GB RAM, 32GB Storage)'))
+#driver = webdriver.Chrome()
+#print(getAmazonData('Redmi A1 (Black, 2GB RAM, 32GB Storage) | Helio A22 | 5000 mAh Battery | 8MP AI Dual Cam | Leather Texture Design | Android 12',driver))
