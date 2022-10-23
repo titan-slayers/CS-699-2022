@@ -1,0 +1,13 @@
+.custom-card{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+    border-radius: 1%;
+}
+
+.navbar-center{
+    margin-left: 30%;
+}
+.ecom-logo{
+    height: 50px;
+    width: 80px;
+}

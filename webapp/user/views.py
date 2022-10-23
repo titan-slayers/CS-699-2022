@@ -12,10 +12,36 @@ from .userAmazon.userSearcher import getUserDataAmazon
 def search(request):
     if request.method == 'POST':
         query = request.POST.get("query")
-        result = getUserDataAmazon(query)
-        print(result)
+        #aresult = getUserDataAmazon(query)
+
+        aresult = ['14,999', '9,499', '4.0', '6366' , 'https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg', 'https://www.amazon.in/Samsung-Stardust-Storage-6000mAh-Battery/dp/B0B4F2K7N1/ref=sr_1_2?keywords=Samsung+Galaxy+M13&qid=1666545025&qu=eyJxc2MiOiIzLjM0IiwicXNhIjoiMi43NyIsInFzcCI6IjIuNDYifQ%3D%3D&sr=8-2']
+        fresult = ["25,999","10,567",'4.2','163','https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg','https://www.flipkart.com/samsung-galaxy-m13-aqua-green-64-gb/p/itm8d54b8d7bc9ce?pid=MOBGGHC2FJUSTVJH&lid=LSTMOBGGHC2FJUSTVJHRQW5MP&marketplace=FLIPKART&q=Samsung+Galaxy+M13+%28Aqua+Green%2C+4GB%2C+64GB+Storage%29+%7C+6000mAh+Battery+%7C+Upto+8GB+RAM+with+RAM+Plus&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=0a1727d0-0a31-4b84-8b05-5fa8df3d0127.MOBGGHC2FJUSTVJH.SEARCH&ppt=hp&ppn=homepage&ssid=dxzw4w623k0000001664542709882&qH=ba0d64a11783c961']
+
+        aprice,adprice,arating,atotalRatings,aimg,alink = aresult[0],aresult[1],aresult[2],aresult[3],aresult[4],aresult[5]
+        adpercent = round(((float(aprice.replace(',', '')) - float(adprice.replace(',', ''))) / float(aprice.replace(',', '')))*100)
+
+        fprice,fdprice,frating,ftotalRatings,fimg,flink = fresult[0],fresult[1],fresult[2],fresult[3],fresult[4],fresult[5]
+        fdpercent = round(((float(fprice.replace(',', '')) - float(fdprice.replace(',', ''))) / float(fprice.replace(',', '')))*100)
+
         context = {
-        'result':result}
+        'aresult':aresult,
+        'aprice':aprice,
+        'adprice':adprice,
+        'adpercent':adpercent,
+        'arating':arating,
+        'atotalRatings':atotalRatings,
+        'aimg':aimg,
+        'alink':alink,
+
+        'fresult':fresult,
+        'fprice':fprice,
+        'fdprice':fdprice,
+        'fdpercent':fdpercent,
+        'frating':frating,
+        'ftotalRatings':ftotalRatings,
+        'fimg':fimg,
+        'flink':flink
+        }
         return render(request,'user/search.html',context)
 
     return render(request,'user/search.html')

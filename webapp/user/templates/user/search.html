@@ -1,8 +1,9 @@
 {% extends 'user/header.html' %}
+{% load static %}
 {% block body %}
 
 
-    <div class="card container">
+    <div class="card" style="margin: 10%;">
 
     <h5 class="card-header">Dynamo</h5>
 
@@ -15,19 +16,125 @@
                 <input type="text" class="form-control"  name="query" placeholder="search...">
               </div>
               <button type="submit" class="btn btn-primary">Search</button>
+
+              
                 
             </form>
 
-            {% if result %}
-                {{ result }}
+            {% if aresult or fresult %}
+            <div class="custom-card">
+
+
+               <div class="row">
+
+                {% if aresult %}
+                <div class="col-md-6">
+
+                    <div class="row">
+                        <div class="col-md-5">
+
+
+                            {% if aimg %}
+                            <img src="{{ aimg }}">
+                            
+                            {% endif %}
+
+                        </div>
+
+                        <div class="col-md-7">
+
+                            <img src="{% static 'user/images/amazon.png' %}" height="70px" width="95px"> <br>
+
+                            {% if aprice %}
+                            <span class="price-text" style="text-decoration: line-through;">&#8377 {{ aprice }}</span>
+                            {% endif %}
+                            {% if adprice %}
+                            &#8377 {{ adprice }}
+                            {% endif %}
+                            <br>
+                            {% if adpercent %}
+                            <span class="badge" style="background-color: blue;">{{ adpercent }}% DISCOUNT</span>
+                            {% endif %}
+                            <br>
+                            {% if arating %}
+                            Average Rating : {{ arating }} <i class="fa-solid fa-star"></i>
+                            {% endif %}
+                            {% if atotalRatings %}
+                            ({{ atotalRatings }})
+                            {% endif %}
+                            <br>
+            
+                            {% if alink %}
+                            <a href=" {{ alink }}" class="btn btn-primary"> Click here to buy </a>
+                            {% endif %}
+                            
+                        </div>
+
+                    </div>
+
+
+                </div>
+                {% endif %}
+
+
+
+                {% if fresult %}
+                <div class="col-md-6">
+
+                    <div class="row">
+                        <div class="col-md-5">
+
+
+                            {% if fimg %}
+                            <img src="{{ fimg }}">
+                            
+                            {% endif %}
+
+                        </div>
+
+                        <div class="col-md-7">
+
+                            <img src="{% static 'user/images/flipkart.png' %}" height="70px" width="130px"> <br>
+
+                            {% if fprice %}
+                            <span class="price-text" style="text-decoration: line-through;">&#8377 {{ fprice }}</span>
+                            {% endif %}
+                            {% if fdprice %}
+                            &#8377 {{ fdprice }}
+                            {% endif %}
+                            <br>
+                            {% if fdpercent %}
+                            <span class="badge" style="background-color: blue;">{{ fdpercent }}% DISCOUNT</span>
+                            {% endif %}
+                            <br>
+                            {% if frating %}
+                            Average Rating : {{ frating }} <i class="fa-solid fa-star"></i>
+                            {% endif %}
+                            {% if ftotalRatings %}
+                            ({{ ftotalRatings }})
+                            {% endif %}
+                            <br>
+            
+                            {% if flink %}
+                            <a href=" {{ flink }}" class="btn btn-primary"> Click here to buy </a>
+                            {% endif %}
+                            
+                        </div>
+
+                    </div>
+
+
+                </div>
+                {% endif %}
+
+               </div>
+
+         
+
+            </div>
             {% endif %}
    
-          <div class="border-top pt-3">
-              <small class="text-muted">
-                  tips..
-              </small>
-          </div>
-
+         
         </div>
 
 </div>
