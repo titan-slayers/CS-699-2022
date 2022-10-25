@@ -1,0 +1,37 @@
+{% extends 'user/header.html' %}
+{% load static %}
+{% block body %}
+
+
+    <div class="card" style="margin: 10%;">
+
+
+
+
+
+            <h3 class="custom-header" style="margin: 0 auto;">History for user : {{ request.user }}</h3>
+
+           
+
+            <div class="row">
+                {% for obj in history_items %}
+                <div class="col-md-3">
+                <div class="custom-card" style="text-align: center;">
+                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 25px; color:rgb(54, 47, 47);"></i>
+                    {{ obj.title }} <br>
+                   <a href="{{ obj.alink }}"> <img src="{% static 'user/images/amazon.png' %}" height="45px" width="90px">  </a>
+                   <a href="{{ obj.flink }}"> <img src="{% static 'user/images/flipkart.png' %}" height="45px" width="90px">  </a>
+
+
+                </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
+         
+     </div>
+
+
+
+{% endblock %}

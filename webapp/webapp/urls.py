@@ -20,10 +20,10 @@ from user import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/',views.index,name='index'),
+    path('trending/',views.trending,name='trending'),
+    path('history/',views.history,name='history'),
     path('',views.loginView,name='login'),
     path('logout',views.logoutView,name='logout'),
     path('signup/',views.signup,name='signup'),
     path('search/',views.search,name='search'),
-    #path('searchHistory/'),
-    #path('latestTrends/')
 ]

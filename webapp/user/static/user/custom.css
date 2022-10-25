@@ -2,6 +2,7 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     padding: 20px;
     border-radius: 1%;
+    margin-top: 20px;
 }
 
 .navbar-center{
@@ -10,4 +11,30 @@
 .ecom-logo{
     height: 50px;
     width: 80px;
+}
+
+body{
+    font-size: 25px;
+}
+
+.custom-header{
+    font-size: 30px;
+    color: rgb(4, 4, 156);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.normal-text{
+    font-size: 20px;
+}
+
+#custom-loader{
+    background  : url("images/loader2.gif") center no-repeat;
+    background-color: rgba(146, 146, 238, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9999999;
+
 }

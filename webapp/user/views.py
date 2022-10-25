@@ -6,22 +6,83 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .userAmazon.userSearcher import getUserDataAmazon
+from .models import Trending,History
+import datetime
 
 
 @login_required
 def search(request):
+    trend_items = Trending.objects.all().order_by('-count')[:4]
+    history_items = History.objects.all()
+    history_items = history_items.filter(user=request.user).order_by('-timestamp')[:4]
+
     if request.method == 'POST':
         query = request.POST.get("query")
-        #aresult = getUserDataAmazon(query)
 
-        aresult = ['14,999', '9,499', '4.0', '6366' , 'https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg', 'https://www.amazon.in/Samsung-Stardust-Storage-6000mAh-Battery/dp/B0B4F2K7N1/ref=sr_1_2?keywords=Samsung+Galaxy+M13&qid=1666545025&qu=eyJxc2MiOiIzLjM0IiwicXNhIjoiMi43NyIsInFzcCI6IjIuNDYifQ%3D%3D&sr=8-2']
+        aresult = getUserDataAmazon(query)
+        #fresult = getUserDataFlipkart(query)
+
+        #aresult = ['14,999', '9,499', '4.0', '6366' , 'https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg', 'https://www.amazon.in/Samsung-Stardust-Storage-6000mAh-Battery/dp/B0B4F2K7N1/ref=sr_1_2?keywords=Samsung+Galaxy+M13&qid=1666545025&qu=eyJxc2MiOiIzLjM0IiwicXNhIjoiMi43NyIsInFzcCI6IjIuNDYifQ%3D%3D&sr=8-2']
         fresult = ["25,999","10,567",'4.2','163','https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg','https://www.flipkart.com/samsung-galaxy-m13-aqua-green-64-gb/p/itm8d54b8d7bc9ce?pid=MOBGGHC2FJUSTVJH&lid=LSTMOBGGHC2FJUSTVJHRQW5MP&marketplace=FLIPKART&q=Samsung+Galaxy+M13+%28Aqua+Green%2C+4GB%2C+64GB+Storage%29+%7C+6000mAh+Battery+%7C+Upto+8GB+RAM+with+RAM+Plus&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=0a1727d0-0a31-4b84-8b05-5fa8df3d0127.MOBGGHC2FJUSTVJH.SEARCH&ppt=hp&ppn=homepage&ssid=dxzw4w623k0000001664542709882&qH=ba0d64a11783c961']
 
         aprice,adprice,arating,atotalRatings,aimg,alink = aresult[0],aresult[1],aresult[2],aresult[3],aresult[4],aresult[5]
-        adpercent = round(((float(aprice.replace(',', '')) - float(adprice.replace(',', ''))) / float(aprice.replace(',', '')))*100)
+
+        if aprice is not None and adprice is not None:
+            adpercent = round(((float(aprice.replace(',', '')) - float(adprice.replace(',', ''))) / float(aprice.replace(',', '')))*100)
+        else:
+            adpercent = 0
 
         fprice,fdprice,frating,ftotalRatings,fimg,flink = fresult[0],fresult[1],fresult[2],fresult[3],fresult[4],fresult[5]
-        fdpercent = round(((float(fprice.replace(',', '')) - float(fdprice.replace(',', ''))) / float(fprice.replace(',', '')))*100)
+
+        if fprice is not None and fdprice is not None:
+            fdpercent = round(((float(fprice.replace(',', '')) - float(fdprice.replace(',', ''))) / float(fprice.replace(',', '')))*100)
+        else:
+            fdpercent = 0
+
+        ct = datetime.datetime.now()
+
+        try:
+            obj1 = Trending.objects.get(title=query)
+            obj1.count += 1
+            obj1.timestamp = ct.timestamp()
+            obj1.save()
+        except:
+            Trending.objects.create(title=query,alink=alink,flink=flink,timestamp=ct.timestamp(),count=0)
+            
+        try:
+            obj2 = History.objects.get(title=query,user=request.user)
+            obj2.timestamp = ct.timestamp()
+            obj2.save()
+        except:
+            History.objects.create(title=query,alink=alink,flink=flink,timestamp=ct.timestamp(),user=request.user)
+
+        if aimg is None:
+            aimg = "{% static 'user/images/default.png' %}"
+
+        if fimg is None:
+            fimg = "{% static 'user/images/default.png' %}"
+
+        if atotalRatings and ftotalRatings:
+            if int(atotalRatings.replace(',', '')) > int(ftotalRatings.replace(',', '')):
+                more_used = 'Amazon'
+            else:
+                more_used = 'Flipkart'
+        else:
+            more_used = None
+
+        better_deal = None
+        not_better_deal = None
+
+        if adpercent != 0 and fdpercent !=0:
+
+            if (int(aprice.replace(',', '')) < int(fprice.replace(',', ''))) and (adpercent < fdpercent) and (int(adprice.replace(',', '')) < int(fdprice.replace(',', ''))):
+                better_deal = 'Amazon'
+                not_better_deal = 'Flipkart'
+
+            if (int(fprice.replace(',', '')) < int(aprice.replace(',', ''))) and (fdpercent < adpercent) and (int(fdprice.replace(',', '')) < int(adprice.replace(',', ''))):
+                better_deal = 'Flipkart'
+                not_better_deal = 'Amazon'
+            
 
         context = {
         'aresult':aresult,
@@ -40,11 +101,42 @@ def search(request):
         'frating':frating,
         'ftotalRatings':ftotalRatings,
         'fimg':fimg,
-        'flink':flink
+        'flink':flink,
+
+        'more_used':more_used,
+        'better_deal':better_deal,
+        'not_better_deal':not_better_deal,
+        
+        'trend_items':trend_items,
+        'history_items':history_items,
+        'query':query
         }
         return render(request,'user/search.html',context)
 
-    return render(request,'user/search.html')
+    context = {
+        'trend_items':trend_items,
+        'history_items':history_items
+        
+    }
+
+    return render(request,'user/search.html',context)
+
+@login_required
+def history(request):
+    history_items = History.objects.all()
+    history_items = history_items.filter(user=request.user).order_by('-timestamp')
+    context = {
+        'history_items':history_items
+    }
+    return render(request,'user/history.html',context)
+
+@login_required
+def trending(request):
+    trending_items = Trending.objects.all().order_by('-count')
+    context = {
+        'trending_items':trending_items
+    }
+    return render(request,'user/trending.html',context)
 
 @login_required
 def index(request):
@@ -76,7 +168,6 @@ def loginView(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
         u = authenticate(username=username, password=password)
-        print(u)
         if u:
             login(request,u)
             messages.success(request, f'Succesfully logged in as {username}')

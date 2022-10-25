@@ -44,7 +44,7 @@ def getRandomAgent():
     }  
     return headers
 
-def getAmazonData(url,query):
+def getAmazonData(url,query,count):
     req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
     time.sleep(5)
     soup = BeautifulSoup(req.content,"lxml")
@@ -95,8 +95,11 @@ def getAmazonData(url,query):
     except:
         link = None
 
-    if ( (not price) and (not link) ):
-        return getUserDataAmazon(url,query)
+    if ( (not price) and (not link)):
+        if count < 3:
+            return getAmazonData(url,query,count+1)
+        else:
+            return getUserDataAmazon(url,query)
 
     return [price,dprice,rating,totalRatings,img,link]
 

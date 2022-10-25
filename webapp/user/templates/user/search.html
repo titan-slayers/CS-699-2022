@@ -5,17 +5,16 @@
 
     <div class="card" style="margin: 10%;">
 
-    <h5 class="card-header">Dynamo</h5>
 
 
     <div class="card-body">
-
+        <h3 class="custom-header">Dynamo</h3>
         <form method="POST">{% csrf_token %}
             <div class="form-group">
                 <label for="query">Enter product to search for</label>
                 <input type="text" class="form-control"  name="query" placeholder="search...">
               </div>
-              <button type="submit" class="btn btn-primary">Search</button>
+              <button type="submit" onclick="disp()" class="btn btn-primary">Search</button>
 
               
                 
@@ -31,7 +30,7 @@
                 <div class="col-md-6">
 
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
 
 
                             {% if aimg %}
@@ -41,10 +40,23 @@
 
                         </div>
 
-                        <div class="col-md-7">
+                        <div class="col-md-8">
 
                             <img src="{% static 'user/images/amazon.png' %}" height="70px" width="95px"> <br>
 
+                            <span class="title"> {{ query }} </span> <br>
+
+                            {% if aprice == 0 %}
+
+                            {% if aprice %}
+                            <span class="price-text">&#8377 {{ aprice }}</span>
+                            {% elif adprice %}
+                            <span class="price-text">&#8377 {{ adprice }}</span>
+                            {% endif %}
+
+
+
+                            {% else %}
                             {% if aprice %}
                             <span class="price-text" style="text-decoration: line-through;">&#8377 {{ aprice }}</span>
                             {% endif %}
@@ -53,14 +65,18 @@
                             {% endif %}
                             <br>
                             {% if adpercent %}
-                            <span class="badge" style="background-color: blue;">{{ adpercent }}% DISCOUNT</span>
+                            <span class="badge" style="background-color: rgb(13, 135, 11); font-size: 18px;">{{ adpercent }}% DISCOUNT</span>
                             {% endif %}
                             <br>
+
+                            {% endif %}
                             {% if arating %}
-                            Average Rating : {{ arating }} <i class="fa-solid fa-star"></i>
+                            <span class="normal-text">
+                            Avg Rating : {{ arating }} <i class="fa-solid fa-star" style="color: rgb(213, 163, 11);"></i>
                             {% endif %}
                             {% if atotalRatings %}
-                            ({{ atotalRatings }})
+                            ({{ atotalRatings }} ratings) 
+                            </span>
                             {% endif %}
                             <br>
             
@@ -82,7 +98,7 @@
                 <div class="col-md-6">
 
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
 
 
                             {% if fimg %}
@@ -92,9 +108,21 @@
 
                         </div>
 
-                        <div class="col-md-7">
+                        <div class="col-md-8">
 
                             <img src="{% static 'user/images/flipkart.png' %}" height="70px" width="130px"> <br>
+
+                            <span class="title"> {{ query }} </span> <br>
+
+                            {% if fdpercent == 0 %}
+
+                            {% if fprice %}
+                            <span class="price-text">&#8377 {{ fprice }}</span>
+                            {% elif fdprice %}
+                            <span class="price-text">&#8377 {{ fdprice }}</span>
+                            {% endif %}
+
+                            {% else %}
 
                             {% if fprice %}
                             <span class="price-text" style="text-decoration: line-through;">&#8377 {{ fprice }}</span>
@@ -104,14 +132,19 @@
                             {% endif %}
                             <br>
                             {% if fdpercent %}
-                            <span class="badge" style="background-color: blue;">{{ fdpercent }}% DISCOUNT</span>
+                            <span class="badge" style="background-color: rgb(13, 135, 11); font-size: 18px;">{{ fdpercent }}% DISCOUNT</span>
                             {% endif %}
                             <br>
+
+                            {% endif %}
+
                             {% if frating %}
-                            Average Rating : {{ frating }} <i class="fa-solid fa-star"></i>
+                            <span class="normal-text">
+                            Avg Rating : {{ frating }} <i class="fa-solid fa-star" style="color: rgb(213, 163, 11);"></i>
                             {% endif %}
                             {% if ftotalRatings %}
-                            ({{ ftotalRatings }})
+                            ({{ ftotalRatings }} ratings)
+                             </span>
                             {% endif %}
                             <br>
             
@@ -129,13 +162,90 @@
 
                </div>
 
+               <div class="row">
+
+                <div class="col-md-12">
+    
+    
+               {% if better_deal or more_used %}
+               <div class="card text-white mb-3" style="margin-top: 30px; background-color: #4454c8;">
+                <div class="card-header">Insights</div>
+                <div class="card-body">
+                 {% if more_used %}
+                  <p class="card-text"> <i class="fa-solid fa-circle-info"></i> More users have purchased this product from {{ more_used }}</p>
+                 {% endif %}
+
+                 {% if better_deal %}
+                 <p class="card-text"> <i class="fa-solid fa-circle-info"></i> {{ not_better_deal }} is inflating original price to boost discount percent, {{ better_deal }} offers a better deal.</p>
+                {% endif %}
+
+                </div>
+              </div>
+    
+               {% endif %}
+    
+               </div>
+    
+    
+               </div>
          
 
             </div>
             {% endif %}
-   
+
+            <h3 class="custom-header">Trending items..</h3>
+            <div class="pt-3">
+                <small class="text-muted">
+                    The most searched items..
+                    <a class="ml-2" href="{% url 'trending' %}">Click here to view more</a>
+                </small>
+            </div>
+
+            <div class="row">
+                {% for obj in trend_items %}
+                <div class="col-md-3">
+                <div class="custom-card" style="text-align: center;">
+                    <i class="fa-solid fa-arrow-trend-up" style="font-size: 25px; color:red;"></i>
+                    {{ obj.title }} <br>
+                   <a href="{{ obj.alink }}"> <img src="{% static 'user/images/amazon.png' %}" height="45px" width="90px">  </a>
+                   <a href="{{ obj.flink }}"> <img src="{% static 'user/images/flipkart.png' %}" height="45px" width="90px">  </a>
+
+
+                </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
+
+            <h3 class="custom-header">Your Recent Searches..</h3>
+
+            <div class="pt-3">
+                <small class="text-muted">
+                    Items you'viewd in the past
+                    <a class="ml-2" href="{% url 'history' %}">Click here to view more</a>
+                </small>
+            </div>
+
+            <div class="row">
+                {% for obj in history_items %}
+                <div class="col-md-3">
+                <div class="custom-card" style="text-align: center;">
+                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 25px; color:rgb(54, 47, 47);"></i>
+                    {{ obj.title }} <br>
+                   <a href="{{ obj.alink }}"> <img src="{% static 'user/images/amazon.png' %}" height="45px" width="90px">  </a>
+                   <a href="{{ obj.flink }}"> <img src="{% static 'user/images/flipkart.png' %}" height="45px" width="90px">  </a>
+
+
+                </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
          
         </div>
+
 
 </div>
 

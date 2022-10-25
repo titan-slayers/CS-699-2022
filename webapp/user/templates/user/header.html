@@ -30,6 +30,8 @@
 
     
     </head>
+    <div id="custom-loader"> hiiii </div>
+
 <body>
 
     <header style="text-align: center ;">
@@ -48,7 +50,6 @@
               <ul class="nav navbar-nav navbar-expand-lg navbar-center">
                 <li><a href="{% url 'index' %}" title="">Home</a></li>
                 <li><a href="{% url 'search' %}" title="">Search</a></li>
-                <li><a href="./project.html" title="">History</a></li>
                 <li><a href="./project.html" title="">Latest Trends</a></li>
                 <li><a href="{% url 'logout' %}" title="">Log out</a></li>
                
@@ -87,16 +88,28 @@
         </div>
       </div>
     
+      
 
     {% block body %}
     {% endblock %}
-
     //Template Source https://themewagon.com/themes/free-bootstrap-agency-html5-template-download-mountain/
 
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
           navbarFixedTopAnimation();
         });
+
+
+        function hideLoader(){
+          $("#custom-loader").hide();
+        }
+
+          function disp() {
+        $('#custom-loader').show(); 
+          }
+
+          $(window).ready(hideLoader);
+
       </script>
 
 
