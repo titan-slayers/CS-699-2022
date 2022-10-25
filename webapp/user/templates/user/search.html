@@ -30,17 +30,17 @@
                 <div class="col-md-6">
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
 
 
                             {% if aimg %}
-                            <img src="{{ aimg }}">
+                            <img src="{{ aimg }}" height="250px" width="100%">
                             
                             {% endif %}
 
                         </div>
 
-                        <div class="col-md-8">
+                        <div class="col-md-7">
 
                             <img src="{% static 'user/images/amazon.png' %}" height="70px" width="95px"> <br>
 
@@ -98,17 +98,17 @@
                 <div class="col-md-6">
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
 
 
                             {% if fimg %}
-                            <img src="{{ fimg }}">
+                            <img src="{{ fimg }}" height="250px" width="100%">
                             
                             {% endif %}
 
                         </div>
 
-                        <div class="col-md-8">
+                        <div class="col-md-7">
 
                             <img src="{% static 'user/images/flipkart.png' %}" height="70px" width="130px"> <br>
 
@@ -179,6 +179,8 @@
                  <p class="card-text"> <i class="fa-solid fa-circle-info"></i> {{ not_better_deal }} is inflating original price to boost discount percent, {{ better_deal }} offers a better deal.</p>
                 {% endif %}
 
+                <p class="card-text"> <i class="fa-solid fa-circle-info"></i>  Try clearing your device’s cache or cookies whenever you’re looking for a product, search using one device and buy using other. </p>
+                <p class="card-text"> <i class="fa-solid fa-circle-info"></i> You can use incognito or vpn for better deals. </p>
                 </div>
               </div>
     

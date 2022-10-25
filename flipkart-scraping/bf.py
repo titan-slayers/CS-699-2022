@@ -2,13 +2,14 @@ from cgitb import text
 from cmath import e
 from email import header
 from pickle import NONE
+import re
+from types import NoneType
 import requests
 from bs4 import BeautifulSoup
 import re,time,random
 import urllib
 from random_user_agent.user_agent import UserAgent
 from random_user_agent.params import SoftwareName, OperatingSystem
-from .seleniumBsSearcher import getUserDataAmazonSel
 
 proxies = { 'http': "http://37.236.59.83:80	", 
             'http': "http://45.120.136.104:80",
@@ -43,65 +44,32 @@ def getRandomAgent():
         'User-Agent': uastrings[random.randint(0, 6)]
     }  
     return headers
+print("enter the item you want to search")
 
-def getAmazonData(url,query,count):
-    req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
-    time.sleep(5)
-    soup = BeautifulSoup(req.content,"lxml")
-    obj = soup.find_all("div", attrs={"class":"s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
-    target = None
-    for o in obj:
-        val = re.findall("(?i)"+processString(query),str(o))
-        if(val):
-            target = o
-            break
+url = "https://www.flipkart.com/search?q=%22Redmi%20A1%20%28Black%2C%202GB%20RAM%2C%2032GB%20Storage%29&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
+
+
+req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
+time.sleep(2)
+soup = BeautifulSoup(req.content,"lxml")
+soup.prettify()
+print(soup)
+
+
+
+
+
+
+
+
+
     
-    if (not target):
-        return None
 
-    try:
-        dprice = target.find("span", attrs={"class":"a-price-whole"})
-        dprice = dprice.text
-    except:
-        dprice = None
+    
 
-    try:
-        price = target.find("span", attrs={"class":"a-price a-text-price"})
-        price = price.find("span", attrs={"class":"a-offscreen"})
-        price = price.text[1:]
-    except:
-        price = None
 
-    try:
-        rating = target.find("span", attrs={"class":"a-icon-alt"})
-        rating = rating.text.split(' ')[0]
-    except:
-        rating = None
 
-    try:
-        totalRatings = target.find("span", attrs={"class":"a-size-base s-underline-text"})
-        totalRatings = totalRatings.text
-    except:
-        totalRatings = None
 
-    try:
-        img = target.find("img", attrs={"class":"s-image"})['src']
-    except:
-        img = None
 
-    try:
-        link = target.find("a", attrs={"class":"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"})
-        link = 'https://www.amazon.in'+str(link['href'])
-    except:
-        link = None
 
-    if ( (not price) and (not link)):
-        if count < 3:
-            return getAmazonData(url,query,count+1)
-        else:
-            return getUserDataAmazonSel(url,query)
-
-    return [price,dprice,rating,totalRatings,img,link]
-
-#print(getAmazonData('Samsung Galaxy M13'))
 

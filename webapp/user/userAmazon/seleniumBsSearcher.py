@@ -22,7 +22,7 @@ def processString(s):
             newString+="\\"+x
     return newString
 
-def getUserDataAmazon(url,query):
+def getUserDataAmazonSel(url,query):
     options = Options()
     options.headless = True
 

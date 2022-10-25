@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .userAmazon.userSearcher import getUserDataAmazon
+from .userFlipkart.search import getUserDataFlipkart
 from .models import Trending,History
 import datetime
 
@@ -20,10 +21,10 @@ def search(request):
         query = request.POST.get("query")
 
         aresult = getUserDataAmazon(query)
-        #fresult = getUserDataFlipkart(query)
+        fresult = getUserDataFlipkart(query)
 
         #aresult = ['14,999', '9,499', '4.0', '6366' , 'https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg', 'https://www.amazon.in/Samsung-Stardust-Storage-6000mAh-Battery/dp/B0B4F2K7N1/ref=sr_1_2?keywords=Samsung+Galaxy+M13&qid=1666545025&qu=eyJxc2MiOiIzLjM0IiwicXNhIjoiMi43NyIsInFzcCI6IjIuNDYifQ%3D%3D&sr=8-2']
-        fresult = ["25,999","10,567",'4.2','163','https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg','https://www.flipkart.com/samsung-galaxy-m13-aqua-green-64-gb/p/itm8d54b8d7bc9ce?pid=MOBGGHC2FJUSTVJH&lid=LSTMOBGGHC2FJUSTVJHRQW5MP&marketplace=FLIPKART&q=Samsung+Galaxy+M13+%28Aqua+Green%2C+4GB%2C+64GB+Storage%29+%7C+6000mAh+Battery+%7C+Upto+8GB+RAM+with+RAM+Plus&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=0a1727d0-0a31-4b84-8b05-5fa8df3d0127.MOBGGHC2FJUSTVJH.SEARCH&ppt=hp&ppn=homepage&ssid=dxzw4w623k0000001664542709882&qH=ba0d64a11783c961']
+        #fresult = ['14,999', '10,499', '4.3', '517', 'https://rukminim1.flixcart.com/image/312/312/xif0q/mobile/c/o/d/galaxy-m13-sm-m135fdbpins-samsung-original-imagghcfsdbuemmd.jpeg?q=70', 'https://www.flipkart.com/samsung-galaxy-m13-midnight-blue-64-gb/p/itme9d85574c16d5?pid=MOBGGHC2BA4ZN3S5&lid=LSTMOBGGHC2BA4ZN3S5NWTNCS&marketplace=FLIPKART&q=Samsung+Galaxy+M13&store=tyy%2F4io&srno=s_1_1&otracker=search&fm=organic&iid=165ede8b-cf6f-4617-9636-7e369f105476.MOBGGHC2BA4ZN3S5.SEARCH&ppt=None&ppn=None&ssid=r99oucjv1c0000001666728398012&qH=c191edb64a8f4f8e']
 
         aprice,adprice,arating,atotalRatings,aimg,alink = aresult[0],aresult[1],aresult[2],aresult[3],aresult[4],aresult[5]
 

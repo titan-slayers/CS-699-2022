@@ -2,13 +2,14 @@ from cgitb import text
 from cmath import e
 from email import header
 from pickle import NONE
+import re
+from types import NoneType
 import requests
 from bs4 import BeautifulSoup
 import re,time,random
 import urllib
 from random_user_agent.user_agent import UserAgent
 from random_user_agent.params import SoftwareName, OperatingSystem
-from .seleniumBsSearcher import getUserDataAmazonSel
 
 proxies = { 'http': "http://37.236.59.83:80	", 
             'http': "http://45.120.136.104:80",
@@ -43,65 +44,89 @@ def getRandomAgent():
         'User-Agent': uastrings[random.randint(0, 6)]
     }  
     return headers
+print("enter the item you want to search")
+query=input()
+url = 'https://www.flipkart.com/search?'
+post_params = {'q': query}
+url +=  urllib.parse.urlencode(post_params)
+req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
+time.sleep(2)
+soup = BeautifulSoup(req.content,"lxml")
+#print(soup.prettify)
 
-def getAmazonData(url,query,count):
-    req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
-    time.sleep(5)
-    soup = BeautifulSoup(req.content,"lxml")
-    obj = soup.find_all("div", attrs={"class":"s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
-    target = None
-    for o in obj:
-        val = re.findall("(?i)"+processString(query),str(o))
-        if(val):
-            target = o
-            break
+name = soup.find("div", attrs={"class":"_1AtVbE col-12-12"})
+item = name
+print(item)
+
+
+item_name = item.find("div",attrs={"class":"_4rR01T"})
+print(item_name)
+
+
+if type(item_name)!=NoneType:
     
-    if (not target):
-        return None
+        
+    product_name=(item_name.text)
+
+
 
     try:
-        dprice = target.find("span", attrs={"class":"a-price-whole"})
-        dprice = dprice.text
+        price = item.find("div",attrs={"class":"_30jeq3 _1_WHN1"})
+        product_price = (price.text)
     except:
-        dprice = None
+        product_price = "None"    
+    try:    
+        productrating = item.find("div",attrs={"class":"_3LWZlK"})
+        product_rating =(productrating.text)
+    except:   
+        product_rating = "none" 
+    try:    
+        reviews = item.find("span", attrs={"class":"_2_R_DZ"})
+        product_reviews = (reviews.text)
+    except:
+        product_reviews = "none"    
 
     try:
-        price = target.find("span", attrs={"class":"a-price a-text-price"})
-        price = price.find("span", attrs={"class":"a-offscreen"})
-        price = price.text[1:]
+        imagelink = item.find("img",attrs={"class":"_396cs4 _3exPp9"})
+        image_link = (imagelink['src'])
+    
+    
+        #print(imagelink.getAttribute('src'))
     except:
-        price = None
-
+        image_link = "none"
+        
     try:
-        rating = target.find("span", attrs={"class":"a-icon-alt"})
-        rating = rating.text.split(' ')[0]
+        productlink = item.find("a",attrs={"class":"_1fQZEK"})    
+        product_link = (productlink['href'])
     except:
-        rating = None
+        product_link = "none"
+    print(item_name)
+    print("price of item is")
+    print(product_price)
+    print("product rating is")
+    print(product_rating)
+    print("product reviews")
+    print(product_reviews)
+    print("image link")
+    print(image_link)
+    print("product link")
+    print(product_link)
 
-    try:
-        totalRatings = target.find("span", attrs={"class":"a-size-base s-underline-text"})
-        totalRatings = totalRatings.text
-    except:
-        totalRatings = None
+    
+    
 
-    try:
-        img = target.find("img", attrs={"class":"s-image"})['src']
-    except:
-        img = None
 
-    try:
-        link = target.find("a", attrs={"class":"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"})
-        link = 'https://www.amazon.in'+str(link['href'])
-    except:
-        link = None
 
-    if ( (not price) and (not link)):
-        if count < 3:
-            return getAmazonData(url,query,count+1)
-        else:
-            return getUserDataAmazonSel(url,query)
 
-    return [price,dprice,rating,totalRatings,img,link]
 
-#print(getAmazonData('Samsung Galaxy M13'))
+
+    
+
+    
+
+
+
+
+
+
 

@@ -1,33 +1,19 @@
 from cgitb import text
 from cmath import e
 from email import header
-from pickle import NONE
+import re
 import requests
 from bs4 import BeautifulSoup
 import re,time,random
 import urllib
 from random_user_agent.user_agent import UserAgent
 from random_user_agent.params import SoftwareName, OperatingSystem
-from .seleniumBsSearcher import getUserDataAmazonSel
 
 proxies = { 'http': "http://37.236.59.83:80	", 
             'http': "http://45.120.136.104:80",
             'http': "http://54.88.125.126:9999",
 
           }
-
-def processString(s):
-    newString = ""
-    for x in s:
-        if x == '"' or x == "'":
-            newString+=x
-        elif x.isalnum() or x==" ":
-            newString+=x
-        else:
-            newString+="\\"+x
-    return newString
-        
-
 def getRandomAgent():
     uastrings = [
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/600.1.25 (KHTML, like Gecko) Version/8.0 Safari/600.1.25",
@@ -44,64 +30,79 @@ def getRandomAgent():
     }  
     return headers
 
-def getAmazonData(url,query,count):
+
+def getFlipkartResults(query,count):
+    url = 'https://www.flipkart.com/search?'
+    post_params = {'q': query}
+    url +=  urllib.parse.urlencode(post_params)
     req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
-    time.sleep(5)
+    time.sleep(2)
     soup = BeautifulSoup(req.content,"lxml")
-    obj = soup.find_all("div", attrs={"class":"s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
-    target = None
-    for o in obj:
-        val = re.findall("(?i)"+processString(query),str(o))
-        if(val):
-            target = o
-            break
-    
-    if (not target):
-        return None
+    try:
+        price = soup.find("div",attrs={"class":"_30jeq3 _1_WHN1"})
+        product_price = (price.text)
+        product_price = re.sub("₹","",product_price)
+    except:
+        product_price = None
+    try:
+        rate=soup.find("div",attrs={"class":'_3I9_wc _27UcVY'}) 
+        flipkart_price=(rate.text)
+        flipkart_price = re.sub("₹","",flipkart_price)
+    except :
+        flipkart_price= None
+                            
+    try:    
+        productrating = soup.find("div",attrs={"class":"_3LWZlK"})
+        product_rating =(productrating.text)
+        
+    except:   
+        product_rating = None 
+    try:    
+        reviews = soup.find("span", attrs={"class":"_2_R_DZ"})
+        product_reviews = (reviews.text.split(" ")[0])
+        
+    except:
+        product_reviews = None   
 
     try:
-        dprice = target.find("span", attrs={"class":"a-price-whole"})
-        dprice = dprice.text
-    except:
-        dprice = None
+        imagelink = soup.find("img",attrs={"class":"_396cs4 _3exPp9"})
+        image_link = (imagelink['src'])
 
+
+        #print(imagelink.getAttribute('src'))
+    except:
+        image_link = None
+        
     try:
-        price = target.find("span", attrs={"class":"a-price a-text-price"})
-        price = price.find("span", attrs={"class":"a-offscreen"})
-        price = price.text[1:]
+        productlink = soup.find("a",attrs={"class":"_1fQZEK"})   
+        
+        product_link = ("https://www.flipkart.com"+productlink['href'])
     except:
-        price = None
+        product_link = None
 
-    try:
-        rating = target.find("span", attrs={"class":"a-icon-alt"})
-        rating = rating.text.split(' ')[0]
-    except:
-        rating = None
-
-    try:
-        totalRatings = target.find("span", attrs={"class":"a-size-base s-underline-text"})
-        totalRatings = totalRatings.text
-    except:
-        totalRatings = None
-
-    try:
-        img = target.find("img", attrs={"class":"s-image"})['src']
-    except:
-        img = None
-
-    try:
-        link = target.find("a", attrs={"class":"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"})
-        link = 'https://www.amazon.in'+str(link['href'])
-    except:
-        link = None
-
-    if ( (not price) and (not link)):
+    if ( (not flipkart_price) and (not product_link)):
         if count < 3:
-            return getAmazonData(url,query,count+1)
-        else:
-            return getUserDataAmazonSel(url,query)
+            return getFlipkartResults(query,count+1)
+    return [flipkart_price, product_price, product_rating, product_reviews, image_link, product_link]
 
-    return [price,dprice,rating,totalRatings,img,link]
+def getUserDataFlipkart(query):
+    return getFlipkartResults(query,0)
 
-#print(getAmazonData('Samsung Galaxy M13'))
+
+
+
+
+
+
+
+
+    
+
+    
+
+
+
+
+
+
 
