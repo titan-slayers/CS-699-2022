@@ -53,6 +53,7 @@ with open(filename, 'w+') as csvfile:
               faulty.append(index)
           try:
               rating=driver.find_element(By.CLASS_NAME,'_3I9_wc')
+              print(rating.text)
               flipkart_rating=rating.text
           except Exception as e:
                flipkart_rating="0"
