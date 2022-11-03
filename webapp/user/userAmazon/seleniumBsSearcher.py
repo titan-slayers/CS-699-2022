@@ -35,14 +35,10 @@ def getUserDataAmazonSel(url,query):
     
     soup = bs(content,"lxml")
     obj = soup.find_all("div", attrs={"class":"s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
-    target = None
-    for o in obj:
-        val = re.findall("(?i)"+processString(query),str(o))
-        if(val):
-            target = o
-            break
     
-    if (not target):
+    try:
+        target = obj[0]
+    except:
         return None
 
 

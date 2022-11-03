@@ -23,22 +23,62 @@ def search(request):
         aresult = getUserDataAmazon(query)
         fresult = getUserDataFlipkart(query)
 
+        asuccess = fsuccess = 0
+        adpercent = fdpercent = 0
+
         #aresult = ['14,999', '9,499', '4.0', '6366' , 'https://m.media-amazon.com/images/I/81Prc5i7hML._AC_UY218_.jpg', 'https://www.amazon.in/Samsung-Stardust-Storage-6000mAh-Battery/dp/B0B4F2K7N1/ref=sr_1_2?keywords=Samsung+Galaxy+M13&qid=1666545025&qu=eyJxc2MiOiIzLjM0IiwicXNhIjoiMi43NyIsInFzcCI6IjIuNDYifQ%3D%3D&sr=8-2']
         #fresult = ['14,999', '10,499', '4.3', '517', 'https://rukminim1.flixcart.com/image/312/312/xif0q/mobile/c/o/d/galaxy-m13-sm-m135fdbpins-samsung-original-imagghcfsdbuemmd.jpeg?q=70', 'https://www.flipkart.com/samsung-galaxy-m13-midnight-blue-64-gb/p/itme9d85574c16d5?pid=MOBGGHC2BA4ZN3S5&lid=LSTMOBGGHC2BA4ZN3S5NWTNCS&marketplace=FLIPKART&q=Samsung+Galaxy+M13&store=tyy%2F4io&srno=s_1_1&otracker=search&fm=organic&iid=165ede8b-cf6f-4617-9636-7e369f105476.MOBGGHC2BA4ZN3S5.SEARCH&ppt=None&ppn=None&ssid=r99oucjv1c0000001666728398012&qH=c191edb64a8f4f8e']
 
-        aprice,adprice,arating,atotalRatings,aimg,alink = aresult[0],aresult[1],aresult[2],aresult[3],aresult[4],aresult[5]
+        try:
+            aprice,adprice,arating,atotalRatings,aimg,alink = aresult[0],aresult[1],aresult[2],aresult[3],aresult[4],aresult[5]
+            asuccess = 1
+        except:
+            aprice,adprice,arating,atotalRatings,aimg,alink = None,None,None,None,None,None
 
-        if aprice is not None and adprice is not None:
-            adpercent = round(((float(aprice.replace(',', '')) - float(adprice.replace(',', ''))) / float(aprice.replace(',', '')))*100)
-        else:
-            adpercent = 0
+        if asuccess:
 
-        fprice,fdprice,frating,ftotalRatings,fimg,flink = fresult[0],fresult[1],fresult[2],fresult[3],fresult[4],fresult[5]
+            if aprice is not None and adprice is not None:
+                adpercent = round(((float(aprice.replace(',', '')) - float(adprice.replace(',', ''))) / float(aprice.replace(',', '')))*100)
 
-        if fprice is not None and fdprice is not None:
-            fdpercent = round(((float(fprice.replace(',', '')) - float(fdprice.replace(',', ''))) / float(fprice.replace(',', '')))*100)
-        else:
-            fdpercent = 0
+            if aimg is None:
+                aimg = "{% static 'user/images/default.png' %}"
+
+        try:
+            fprice,fdprice,frating,ftotalRatings,fimg,flink = fresult[0],fresult[1],fresult[2],fresult[3],fresult[4],fresult[5]
+            fsuccess = 1
+        except:
+            fprice,fdprice,frating,ftotalRatings,fimg,flink = None,None,None,None,None,None
+
+        if fsuccess:
+            if fprice is not None and fdprice is not None:
+                fdpercent = round(((float(fprice.replace(',', '')) - float(fdprice.replace(',', ''))) / float(fprice.replace(',', '')))*100)
+            else:
+                fdpercent = 0
+
+            if fimg is None:
+                fimg = "{% static 'user/images/default.png' %}"
+
+        better_deal = None
+        not_better_deal = None
+        more_used = None
+
+
+        if asuccess and fsuccess:
+            if atotalRatings and ftotalRatings:
+                if int(atotalRatings.replace(',', '')) > int(ftotalRatings.replace(',', '')):
+                    more_used = 'Amazon'
+                else:
+                    more_used = 'Flipkart'
+
+            if adpercent != 0 and fdpercent !=0:
+
+                if (int(aprice.replace(',', '')) < int(fprice.replace(',', ''))) and (adpercent < fdpercent) and (int(adprice.replace(',', '')) < int(fdprice.replace(',', ''))):
+                    better_deal = 'Amazon'
+                    not_better_deal = 'Flipkart'
+
+                if (int(fprice.replace(',', '')) < int(aprice.replace(',', ''))) and (fdpercent < adpercent) and (int(fdprice.replace(',', '')) < int(adprice.replace(',', ''))):
+                    better_deal = 'Flipkart'
+                    not_better_deal = 'Amazon'
 
         ct = datetime.datetime.now()
 
@@ -48,41 +88,16 @@ def search(request):
             obj1.timestamp = ct.timestamp()
             obj1.save()
         except:
-            Trending.objects.create(title=query,alink=alink,flink=flink,timestamp=ct.timestamp(),count=0)
+            if alink and flink:
+                Trending.objects.create(title=query,alink=alink,flink=flink,timestamp=ct.timestamp(),count=0)
             
         try:
             obj2 = History.objects.get(title=query,user=request.user)
             obj2.timestamp = ct.timestamp()
             obj2.save()
         except:
-            History.objects.create(title=query,alink=alink,flink=flink,timestamp=ct.timestamp(),user=request.user)
-
-        if aimg is None:
-            aimg = "{% static 'user/images/default.png' %}"
-
-        if fimg is None:
-            fimg = "{% static 'user/images/default.png' %}"
-
-        if atotalRatings and ftotalRatings:
-            if int(atotalRatings.replace(',', '')) > int(ftotalRatings.replace(',', '')):
-                more_used = 'Amazon'
-            else:
-                more_used = 'Flipkart'
-        else:
-            more_used = None
-
-        better_deal = None
-        not_better_deal = None
-
-        if adpercent != 0 and fdpercent !=0:
-
-            if (int(aprice.replace(',', '')) < int(fprice.replace(',', ''))) and (adpercent < fdpercent) and (int(adprice.replace(',', '')) < int(fdprice.replace(',', ''))):
-                better_deal = 'Amazon'
-                not_better_deal = 'Flipkart'
-
-            if (int(fprice.replace(',', '')) < int(aprice.replace(',', ''))) and (fdpercent < adpercent) and (int(fdprice.replace(',', '')) < int(adprice.replace(',', ''))):
-                better_deal = 'Flipkart'
-                not_better_deal = 'Amazon'
+            if alink and flink:
+                History.objects.create(title=query,alink=alink,flink=flink,timestamp=ct.timestamp(),user=request.user)
             
 
         context = {
@@ -110,7 +125,10 @@ def search(request):
         
         'trend_items':trend_items,
         'history_items':history_items,
-        'query':query
+        'query':query,
+
+        'fsuccess':fsuccess,
+        'asuccess':asuccess
         }
         return render(request,'user/search.html',context)
 

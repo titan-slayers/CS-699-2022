@@ -49,15 +49,15 @@ def getAmazonData(url,query,count):
     time.sleep(5)
     soup = BeautifulSoup(req.content,"lxml")
     obj = soup.find_all("div", attrs={"class":"s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
-    target = None
-    for o in obj:
-        val = re.findall("(?i)"+processString(query),str(o))
-        if(val):
-            target = o
-            break
+
+    try:
+        target = obj[0]
+    except:
+        if count < 3:
+            return getAmazonData(url,query,count+1)
+        else:
+            return getUserDataAmazonSel(url,query)
     
-    if (not target):
-        return None
 
     try:
         dprice = target.find("span", attrs={"class":"a-price-whole"})
