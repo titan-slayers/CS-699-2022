@@ -7,3 +7,4 @@ References <br>
 loader gif : loading.io <br>
 Template Source (only CSS used, JS self coded) :  https://themewagon.com/themes/free-bootstrap-agency-html5-template-download-mountain/ <br>
 images : undraw.io <br>
+favicon : Icons8 https://icons8.com
