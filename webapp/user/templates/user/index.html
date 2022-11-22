@@ -1,20 +1,27 @@
 {% extends 'user/header.html' %}
 {% block body %}
+{% load static %}
 
 
-    <div class="card container">
+
+    <div class="card container" style="margin-bottom: 50px; width: 100%;">
 
         <div class="section-container">
-            <div class="container">
+            <div class="container" style="width: 100%;">
               <div class="row">
-                <div class="col-xs-12 col-md-8 col-md-offset-2">
-                  <div class="text-center">
+                <div class="col-md-4" style="text-align: center;">
+                  <img src="{% static 'user/images/undraw.svg' %}" height="100%" width="100%">
+                </div>
+                <div class="col-md-8">
+                  <div class="text-left">
                     <h2>About Us</h2>
 
 
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas luctus at sem quis varius. 
-                    <br>
-                    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus iaculis magna sagittis elit sagittis, at hendrerit lorem venenatis. Morbi accumsan iaculis blandit. Cras ultrices hendrerit nisl.</p>
+                    <p> <b>Confused whether to buy from Amazon or Flipkart? </b>
+                    <br> <br> 
+                    Well, so were we. E-commerce websites pricing model revolves around offering the most competitive prices to customers, which means, the prices don’t stay constant and change dynamically. It is important to check and compare prices before purchasing any product. <br> <br>
+                     So we decided to build a scraper that extracts data from both the Ecommerce sites and monitors and compares their prices. 
+                    We have added a search bar to compare prices for any product, and an analysis section which shows plots of data we collected for a month.  Check out the insights at last to see our conclusions based on the same!</p>
 
                   </div>
                </div>

@@ -1,0 +1,200 @@
+{% extends 'user/header.html' %}
+{% load static %}
+{% block body %}
+
+
+    <div class="card" style="margin: 10%; text-align: center;">
+
+
+
+
+
+            <h3 class="custom-header" style="margin: 0 auto;">Graphs for latest trends</h3>
+
+            <div class="card text-white mb-3" style="margin-top: 30px; background-color: #4454c8;">
+                <div class="card-text">We scraped data of around 50 electronic items from both amazon and flipkart for around one month, including the festival period. <br>
+                We preprocessed the data and made various graphs for comparison between the the two major Ecommerce giants.</div>
+               
+              </div>
+
+           <div class="myimg">
+            <img src="{% static 'user/images/bar.png' %}" height="450px" width="750px">
+
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Number of ratings for different ranges for Amazon & Flipkart
+                </small>
+            </div>
+
+           </div>
+
+           <ul class="nav nav-tabs cursor" style="text-align:center; margin: 0 auto; padding-top: 100px;">
+            <li class="nav-item">
+              <a class="nav-link active" id="amazon-link" onclick="setAmazon()" >Amazon</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="flipkart-link" onclick="setFlipkart()">Flipkart</a>
+            </li>
+          </ul>
+
+
+           <div class="myimg" id="amazon-pie">
+            <img src="{% static 'user/images/pie1.png' %}" height="750px" width="950px">
+            
+
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Category wise count for Amazon
+                </small>
+            </div>
+
+           </div>
+
+           <div class="myimg" id="flipkart-pie" style="display: none;">
+            <img src="{% static 'user/images/pie2.png' %}" height="750px" width="950px">
+            
+
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Category wise count for Flipkart
+                </small>
+            </div>
+
+           </div>
+
+           <div class="row" style="padding-top: 150px;">
+            <div class="col-md-3">
+
+                <div class="card" style="width: 100%;">
+                    <ul class="list-group list-group-flush">
+                        {% for obj in objs %}
+                        <li class="list-group-item cursor" id={{obj.1}} onclick="setElements({{obj.1}})" >{{obj.0}}</li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+
+            </div>
+
+            <div id="item1">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/1.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item2" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/2.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item3" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/3.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item4" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/4.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item5" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/5.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item6" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/6.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item7" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/7.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item8" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/8.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item9" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/9.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+
+           <div id="item10" style="display: none;">
+            <div class="col-md-9">
+                        <img src="{% static 'user/images/10.png' %}" height="750px" width="950px">
+            </div>
+           </div>
+ 
+         
+     </div>
+
+     <div class="card text-white mb-3" style="margin-top: 30px; background-color: #4454c8; text-align: left;">
+        <div class="card-header">Insights</div>
+        <div class="card-body">
+          <p class="card-text"> <i class="fa-solid fa-circle-info"></i> The prices don’t stay constant and keep changing dynamically. Apart from the price, user rating is the important parameter which determines the sale factor of the product. </p>
+
+         <p class="card-text"> <i class="fa-solid fa-circle-info"></i>  Flipkart prices were highly varied as compared to amazon.</p>
+
+        <p class="card-text"> <i class="fa-solid fa-circle-info"></i>  It was generally observed that on some days Flipkart overshoots its price,and then bounces back to its  original price. </p>
+        <p class="card-text"> <i class="fa-solid fa-circle-info"></i> This trend was also seen in amazon but the overshoot price was less as compared to flipkart. </p>
+        <p class="card-text"> <i class="fa-solid fa-circle-info"></i> During the festive time [20-25 October] Flipkart increased its price more as compared to amazon. </p>
+        <p class="card-text"> <i class="fa-solid fa-circle-info"></i> Number of user ratings were more for Amazon indicating that more people purchased from Amazon. </p>
+        <p class="card-text"> <i class="fa-solid fa-circle-info"></i> As conclusion we can say, Amazon is a better choice, but it is always recommended to check prices at both platforms before purchasing any product. </p>
+
+
+        </div>
+      </div>
+
+     <script>
+        function setAmazon()
+        {
+            document.getElementById("amazon-pie").style.display = "";
+            document.getElementById("flipkart-pie").style.display = "none";
+
+            document.getElementById("amazon-link").classList.add("active");
+            document.getElementById("flipkart-link").classList.remove("active");
+        }
+        function setFlipkart()
+        {
+            document.getElementById("flipkart-pie").style.display = "";
+            document.getElementById("amazon-pie").style.display = "none";
+
+            document.getElementById("amazon-link").classList.remove("active");
+            document.getElementById("flipkart-link").classList.add("active");
+        }
+
+        window.onload = document.getElementById("1").classList.add("make-selected");
+
+        function setElements(id)
+        {
+            //item+"id" set display " " rest set display none 
+            for(i=1; i<11; i++)
+            {
+                newId = "item" + String(i);
+                if (String(i) == id)
+                {
+                    document.getElementById(newId).style.display = "";
+                    document.getElementById(id).classList.add("make-selected");
+                }
+                else{
+                    document.getElementById(newId).style.display = "none";
+                    document.getElementById(String(i)).classList.remove("make-selected");
+                }
+            }
+            
+        }
+     </script>
+
+
+
+{% endblock %}

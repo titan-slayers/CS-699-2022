@@ -198,3 +198,27 @@ def loginView(request):
 def logoutView(request):
     logout(request)
     return redirect('login')
+
+
+@login_required
+def latest_trends(request):
+    objs = [
+        ["Samsung Galaxy M13",'1'],
+        ["Apple watch SE",'2'],
+        ["boat speakers",'3'],
+        ["HP14s laptop",'4'],
+        ["HP15s laptop",'5'],
+        ["MI80cm tv",'6'],
+        ["Oneplus 108cm tv",'7'],
+        ["Whirpool 6.5kg washing machine",'8'],
+        ["LG 7kg semi automatic washing machine",'9'],
+        ["LG 7kg washing machine with heater",'10']
+
+    ]
+    '''
+    
+    '''
+    context = {
+        'objs': objs
+    }
+    return render(request,'user/latest_trends.html',context)

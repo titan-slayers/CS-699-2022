@@ -46,17 +46,20 @@ def getRandomAgent():
 
 def getAmazonData(url,query,count):
     req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
-    time.sleep(5)
+    time.sleep(2)
     soup = BeautifulSoup(req.content,"lxml")
     obj = soup.find_all("div", attrs={"class":"s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
 
     try:
         target = obj[0]
     except:
-        if count < 3:
-            return getAmazonData(url,query,count+1)
-        else:
-            return getUserDataAmazonSel(url,query)
+        try:
+            obj = soup.find_all("div", attrs={"class":"sg-col-20-of-24 s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
+        except:
+            if count < 3:
+                return getAmazonData(url,query,count+1)
+            else:
+                return getUserDataAmazonSel(url,query)
     
 
     try:

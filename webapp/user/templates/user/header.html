@@ -18,7 +18,7 @@
         
         
         <link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-icon-180x180.png">
-        <link href="./assets/favicon.ico" rel="icon">
+        <link href="{% static 'user/images/favicon.png' %}" rel="icon">
       
         <link href="" rel="stylesheet">
       
@@ -50,7 +50,7 @@
               <ul class="nav navbar-nav navbar-expand-lg navbar-center">
                 <li><a href="{% url 'index' %}" title="">Home</a></li>
                 <li><a href="{% url 'search' %}" title="">Search</a></li>
-                <li><a href="./project.html" title="">Latest Trends</a></li>
+                <li><a href="{% url 'latest_trends' %}" title="">Latest Trends</a></li>
                 <li><a href="{% url 'logout' %}" title="">Log out</a></li>
                
       
@@ -92,7 +92,7 @@
 
     {% block body %}
     {% endblock %}
-    //Template Source https://themewagon.com/themes/free-bootstrap-agency-html5-template-download-mountain/
+    
 
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {

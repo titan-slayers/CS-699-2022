@@ -36,49 +36,104 @@ def getFlipkartResults(query,count):
     post_params = {'q': query}
     url +=  urllib.parse.urlencode(post_params)
     req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
-    time.sleep(2)
+    time.sleep(1)
     soup = BeautifulSoup(req.content,"lxml")
     try:
-        price = soup.find("div",attrs={"class":"_30jeq3 _1_WHN1"})
-        product_price = (price.text)
-        product_price = re.sub("₹","",product_price)
-    except:
-        product_price = None
-    try:
-        rate=soup.find("div",attrs={"class":'_3I9_wc _27UcVY'}) 
-        flipkart_price=(rate.text)
-        flipkart_price = re.sub("₹","",flipkart_price)
-    except :
-        flipkart_price= None
-                            
-    try:    
-        productrating = soup.find("div",attrs={"class":"_3LWZlK"})
-        product_rating =(productrating.text)
+        item = soup.find("div", attrs={"class":"_2kHMtA"})
         
-    except:   
-        product_rating = None 
-    try:    
-        reviews = soup.find("span", attrs={"class":"_2_R_DZ"})
-        product_reviews = (reviews.text.split(" ")[0])
-        
-    except:
-        product_reviews = None   
 
-    try:
-        imagelink = soup.find("img",attrs={"class":"_396cs4 _3exPp9"})
-        image_link = (imagelink['src'])
+        try:
+            price = item.find("div",attrs={"class":"_30jeq3 _1_WHN1"})
+            product_price = (price.text)
+            product_price = re.sub("₹","",product_price)
+            product_price = re.sub(",","",product_price)
+        except:
+            product_price = None
+        try:
+            rate=item.find("div",attrs={"class":'_3I9_wc _27UcVY'}) 
+            flipkart_price=(rate.text)
+            flipkart_price = re.sub("₹","",flipkart_price)
+            flipkart_price = re.sub(",","",flipkart_price)
+        except :
+            flipkart_price= None
+                                
+        try:    
+            productrating = item.find("div",attrs={"class":"_3LWZlK"})
+            product_rating =(productrating.text)
+            
+        except:   
+            product_rating =  None 
+        try:    
+            reviews = item.find("span", attrs={"class":"_2_R_DZ"})
+            product_reviews = (reviews.text.split(" ")[0])
+            
+        except:
+            product_reviews =  None    
+
+        try:
+            imagelink = item.find("img",attrs={"class":"_396cs4 _3exPp9"})
+            image_link = (imagelink['src'])
 
 
-        #print(imagelink.getAttribute('src'))
-    except:
-        image_link = None
+            #print(imagelink.getAttribute('src'))
+        except:
+            image_link =  None
+            
+        try:
+            productlink = item.find("a",attrs={"class":"_1fQZEK"})   
+            
+            product_link = ("https://www.flipkart.com"+productlink['href'])
+        except:
+            product_link =  None
+
         
-    try:
-        productlink = soup.find("a",attrs={"class":"_1fQZEK"})   
-        
-        product_link = ("https://www.flipkart.com"+productlink['href'])
     except:
-        product_link = None
+        item=soup.find("div",attrs={'class':"_4ddWXP"})
+        try:
+            price = item.find("div",attrs={"class":"_30jeq3"})
+            product_price = (price.text)
+            product_price = re.sub("₹","",product_price)
+            product_price = re.sub(",","",product_price)
+        except:
+            product_price =  None 
+        try:
+            rate=item.find("div",attrs={"class":'_3I9_wc'}) 
+            flipkart_price=(rate.text)
+            flipkart_price = re.sub("₹","",flipkart_price)
+            flipkart_price = re.sub(",","",flipkart_price)
+        except :
+            flipkart_price= None
+                                
+        try:    
+            productrating = item.find("div",attrs={"class":"_3LWZlK"})
+            product_rating =(productrating.text)
+            
+        except:   
+            product_rating =  None 
+        try:    
+            reviews = item.find("span", attrs={"class":"_2_R_DZ"})
+            product_reviews = (reviews.text.split(" ")[0])
+            
+        except:
+            product_reviews =  None    
+
+        try:
+            imagelink = item.find("img",attrs={"class":"_396cs4 _3exPp9"})
+            image_link = (imagelink['src'])
+
+
+            #print(imagelink.getAttribute('src'))
+        except:
+            image_link =  None
+            
+        try:
+            productlink = item.find("a",attrs={"class":"_2rpwqI"})   
+            
+            product_link = ("https://www.flipkart.com"+productlink['href'])
+        except:
+            product_link =  None
+
+        
 
     if ( (not flipkart_price) and (not product_link)):
         if count < 3:

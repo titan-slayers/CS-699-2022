@@ -2,8 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plot
 
-am = pd.read_csv('amazon.csv')
-fp = pd.read_csv('flipkart.csv')
+am = pd.read_csv('../../amazon-scraping/data/data_25_10_2022_AM.csv')
+fp = pd.read_csv('../../flipkart-scraping/data/data_25_10_2022_AM.csv')
 am = am[['index','category','amazon-rating','amazon-total-ratings']]
 am['amazon-total-ratings'] = am['amazon-total-ratings'].apply(lambda x: np.float64(x.replace(',', '')))
 fp = fp[['index','category','flipkart-rating','flipkart-total-ratings']]
