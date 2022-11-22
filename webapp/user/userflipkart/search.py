@@ -35,11 +35,14 @@ def getFlipkartResults(query,count):
     url = 'https://www.flipkart.com/search?'
     post_params = {'q': query}
     url +=  urllib.parse.urlencode(post_params)
+    cnt=1
     req = requests.get(url, headers=getRandomAgent(),proxies=proxies)
     time.sleep(1)
     soup = BeautifulSoup(req.content,"lxml")
     try:
         item = soup.find("div", attrs={"class":"_2kHMtA"})
+        if item.text:
+            cnt=1
         
 
         try:
@@ -66,6 +69,8 @@ def getFlipkartResults(query,count):
         try:    
             reviews = item.find("span", attrs={"class":"_2_R_DZ"})
             product_reviews = (reviews.text.split(" ")[0])
+            product_reviews=re.sub(r"[\([{})\]]","",product_reviews)
+            product_reviews = re.sub(",","",product_reviews)
             
         except:
             product_reviews =  None    
@@ -113,6 +118,8 @@ def getFlipkartResults(query,count):
         try:    
             reviews = item.find("span", attrs={"class":"_2_R_DZ"})
             product_reviews = (reviews.text.split(" ")[0])
+            product_reviews=re.sub(r"[\([{})\]]","",product_reviews)
+            product_reviews = re.sub(",","",product_reviews)
             
         except:
             product_reviews =  None    
@@ -132,6 +139,9 @@ def getFlipkartResults(query,count):
             product_link = ("https://www.flipkart.com"+productlink['href'])
         except:
             product_link =  None
+    
+
+      
 
         
 
@@ -142,22 +152,3 @@ def getFlipkartResults(query,count):
 
 def getUserDataFlipkart(query):
     return getFlipkartResults(query,0)
-
-
-
-
-
-
-
-
-
-    
-
-    
-
-
-
-
-
-
-
